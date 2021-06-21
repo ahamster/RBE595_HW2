@@ -7,7 +7,8 @@ import numpy as np
 from numpy.core.fromnumeric import trace
 from scipy.ndimage.interpolation import map_coordinates
 
-#####
+
+# Credits: borrowed code from cianconway on github
 def match(desc1,desc2,threshold=0.5): #Match method, for each corner in image 1, selects it's match in image 2 using normalized cross corelation
     
     n = len(desc1[0])
@@ -27,6 +28,7 @@ def match(desc1,desc2,threshold=0.5): #Match method, for each corner in image 1,
     
     return matchscores
 
+# Credits: borrowed code from cianconway on github
 def drawMatches(img1, kp1, img2, kp2, matches, inliers = None):
     # Create a new output image that concatenates the two images together
     rows1 = img1.shape[0]
@@ -76,16 +78,15 @@ def drawMatches(img1, kp1, img2, kp2, matches, inliers = None):
 
     return out
 
-#####
-
+# Credits: inspired by code from stheakanath for descriptors
 def get_descriptors(image, coordinates, wid=5):
     # Get features from points
     desc = []
     img_height, img_width = image.shape[1], image.shape[0]
-    print("height, width:", image.shape[1], image.shape[0])
+    # print("height, width:", image.shape[1], image.shape[0])
     for y, x in zip(*coordinates):
         if x-wid < 0 or y-wid < 0 or y+wid > img_height or x+wid > img_width:
-            print("x,y:",x,y, "minx, miny:",x-wid, y-wid, "maxx,maxy:", x+wid, y+wid)
+            # print("x,y:",x,y, "minx, miny:",x-wid, y-wid, "maxx,maxy:", x+wid, y+wid)
             patch_val = 0
         else:
                       
@@ -94,8 +95,6 @@ def get_descriptors(image, coordinates, wid=5):
         desc.append(patch_val)
     
     return desc
-
-
 
 def harris_corner(img):
     window_size_ratio = .05 # as a fraction of image height
@@ -201,17 +200,7 @@ cv2.imshow('Image2 Window of R', img2_circled)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-""" # calc patch position and extract the patch
-patch_size = 8
-patch_x = round(500 - patch_size / 2.)
-patch_y = round(500 - patch_size / 2.)
-patch_image = img1[patch_x:patch_x+patch_size, patch_y:patch_y+patch_size]
-
-cv2.imshow("cropped", patch_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows() """
-
-desc1 = get_descriptors(img1, harris_points_img1)
+desc1 = get_descriptors(img1, harris_points_img1) # get patch of image for each point and compute 
 desc2 = get_descriptors(img2, harris_points_img2)
 
 kp1 = harris_points_img1
