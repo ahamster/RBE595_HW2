@@ -4,8 +4,6 @@
 
 import cv2
 import numpy as np
-from numpy.core.fromnumeric import trace
-from scipy.ndimage.interpolation import map_coordinates
 
 
 # Credits: borrowed code from cianconway on github
